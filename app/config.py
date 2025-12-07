@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import List
 from functools import lru_cache
+import os
 
 
 class Settings(BaseSettings):
@@ -19,17 +20,18 @@ class Settings(BaseSettings):
     
     # Server Configuration
     api_host: str = "0.0.0.0"
-    api_port: int = 8000
-    debug: bool = True
+    api_port: int = int(os.getenv("PORT", "8000"))  # Render uses $PORT
+    debug: bool = os.getenv("DEBUG", "True").lower() == "true"
     
     # CORS Origins
     cors_origins: str = "http://localhost:3000,http://localhost:8081"
     
+    # Payment Configuration - COMMENTED OUT (not using payment systems)
     # PayTR Configuration (optional)
-    paytr_merchant_id: str = ""
-    paytr_merchant_key: str = ""
-    paytr_merchant_salt: str = ""
-    paytr_mode: str = "test"  # test or live
+    # paytr_merchant_id: str = ""
+    # paytr_merchant_key: str = ""
+    # paytr_merchant_salt: str = ""
+    # paytr_mode: str = "test"  # test or live
     
     @property
     def cors_origins_list(self) -> List[str]:

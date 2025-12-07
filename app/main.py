@@ -3,11 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from .config import get_settings
-from .routers import auth_router, charts_router, templates_router, subscription_router
+from .routers import auth_router, charts_router, templates_router
+# Payment/Subscription routers - COMMENTED OUT (not using payment systems)
+# from .routers import subscription_router
 from .routers.ai import router as ai_router
 from .routers.profile import router as profile_router
-from .routers.payment import router as payment_router
-from .routers.iap import router as iap_router
+# from .routers.payment import router as payment_router
+# from .routers.iap import router as iap_router
 
 
 @asynccontextmanager
@@ -44,11 +46,12 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(charts_router)
 app.include_router(templates_router)
-app.include_router(subscription_router)
-app.include_router(payment_router)
+# Payment/Subscription routers - COMMENTED OUT (not using payment systems)
+# app.include_router(subscription_router)
+# app.include_router(payment_router)
 app.include_router(ai_router)
 app.include_router(profile_router)
-app.include_router(iap_router)
+# app.include_router(iap_router)
 
 
 @app.get("/")
