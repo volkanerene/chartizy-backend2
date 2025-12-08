@@ -15,7 +15,6 @@ class ProfileUpdateRequest(BaseModel):
 
 class ProfileUpdateResponse(BaseModel):
     success: bool
-    message: str
     first_name: Optional[str] = None
     last_name: Optional[str] = None
 
@@ -47,7 +46,6 @@ async def update_profile(
     
     return ProfileUpdateResponse(
         success=True,
-        message="Profile updated successfully",
         first_name=updated_user.get("first_name") if updated_user else request.first_name,
         last_name=updated_user.get("last_name") if updated_user else request.last_name
     )
