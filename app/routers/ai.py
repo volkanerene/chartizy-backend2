@@ -29,6 +29,15 @@ class AnalyzePromptResponse(BaseModel):
     data_interpretation: str
 
 
+class TranscribeAudioRequest(BaseModel):
+    audio_base64: str
+    mime_type: Optional[str] = None
+
+
+class TranscribeAudioResponse(BaseModel):
+    text: str
+
+
 @router.post("/analyze-prompt", response_model=AnalyzePromptResponse)
 async def analyze_prompt(
     request: AnalyzePromptRequest,
@@ -45,6 +54,14 @@ async def analyze_prompt(
             status_code=500,
             detail=f"AI analysis failed: {str(e)}"
         )
+
+
+@router.post("/transcribe-audio", response_model=TranscribeAudioResponse)
+async def transcribe_audio(request: TranscribeAudioRequest):
+    result = await OpenAIService.transcribe_audio(request.audio_base64, request.mime_type)
+    if "error" in result:
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {result['error']}")
+    return TranscribeAudioResponse(text=result.get("text", ""))
 
 
 class GenerateDataRequest(BaseModel):
@@ -80,4 +97,3 @@ async def generate_data(
             status_code=500,
             detail=f"Data generation failed: {str(e)}"
         )
-

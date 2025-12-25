@@ -78,17 +78,9 @@ class SupabaseService:
             return False
         
         try:
-            # First, ensure user exists in graphzy_users table
-            existing_user = await cls.get_user_by_id(user_id)
-            if not existing_user:
-                # Create user if doesn't exist
-                await cls.create_user(user_id, "")
-            
-            # Update user profile
             response = client.table("graphzy_users").update(update_data).eq("id", user_id).execute()
             return bool(response.data)
-        except Exception as e:
-            print(f"Error updating user profile: {e}")
+        except Exception:
             return False
     
     @classmethod
